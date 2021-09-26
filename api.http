@@ -7,7 +7,7 @@ GET http://localhost:5000/user
 ###
 GET http://localhost:5000/user/activate/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik5ndXllbiBIdXUgTG9uZyIsImVtYWlsIjoiZGVvc29tYTMyQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoia2hvbmdiaWV0MTIzIiwiaWF0IjoxNjMyNjYxNzkzLCJleHAiOjE2MzI2NjUzOTN9.JdnVPaeyZMTZDRkngAlW6jdaDw8MMDrUqe60K1foKDE
 ###
-POST http://localhost:5000/user/signup
+POST https://chito-stationery.herokuapp.com/user/signup
 Content-Type: application/json
 
 {
