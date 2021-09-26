@@ -1,0 +1,24 @@
+GET http://localhost:5000/posts
+
+###
+
+GET http://localhost:5000/user
+
+###
+POST https://chito-stationery.herokuapp.com/signup
+Content-Type: application/json
+
+{
+    "username": "Nguyen Huu Long",
+    "email": "deosoma32@gmail.com",
+    "password": "uncle-b"
+}
+
+###
+POST http://localhost:5000/users/login
+Content-Type: application/json
+
+{
+    "name": "Long",
+    "password": "khongbiet"
+}
