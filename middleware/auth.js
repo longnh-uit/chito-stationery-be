@@ -17,12 +17,6 @@ const authSignup = async (req, res, next) => {
             .status(400)
             .json("Password must contains letters, digits and at least 6 characters");
     
-    // If all match, check existing user
-    const existingUser = await User.findOne({ username: user.username});
-    if (existingUser) {
-        return res.status(400).json("That username is already taken");
-    }
-
     const existingEmail = await User.findOne({ email: user.email });
     if (existingEmail) {
         return res.status(400).json("That email is already taken");
