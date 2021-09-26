@@ -1,8 +1,10 @@
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const { signUp } = require("../../services/userService")
 
 require("dotenv").config()
+
 
 module.exports.signup_post = (req, res) => {
     const userData = req.body;
@@ -27,10 +29,11 @@ module.exports.signup_post = (req, res) => {
         subject: "Chito Stationery - Activate your account",
         html: `
             <h3>Please follow link to active your account</h3>
-            <p>${keys.CLIENT_URL}/auth/activate/${token}</p>
+            <p>${process.env.SERVER_URL}/auth/activate/${token}</p>
             <hr/>
         `,
     };
+
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
@@ -40,4 +43,24 @@ module.exports.signup_post = (req, res) => {
             return res.json(`Email has been sent to ${email}`);
         }
     });   
+}
+
+module.exports.activate = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const decoded = jwt.verify(token, keys.JWT_Secret);
+        const { email } = decoded;
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.send(
+            "Your email has been taken, please use other email to signup"
+            );
+        }
+        await signUp(userData);
+        return res.send(
+            "Your account has been activated, please login to use our service, thank you"
+        );
+    } catch (err) {
+        res.status(400).send("Your link has been expired, please signup again");
+    }
 }
