@@ -22,5 +22,6 @@ const authSignup = async (req, res, next) => {
         return res.status(400).json("That email is already taken");
     }
     next();
-    module.exports = { authSignup };
 }
+
+module.exports = { authSignup };

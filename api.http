@@ -5,7 +5,7 @@ GET http://localhost:5000/posts
 GET http://localhost:5000/user
 
 ###
-POST https://chito-stationery.herokuapp.com/signup
+POST https://chito-stationery.herokuapp.com/user/signup
 Content-Type: application/json
 
 {
