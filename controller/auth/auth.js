@@ -36,7 +36,7 @@ module.exports.signup_post = (req, res) => {
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
-            return res.status(400).json(`Error when send email to ${email}`);
+            return res.status(400).json({ msg: `Error when send email to ${email}`, error: error });
         } else {
             console.log("Email sent: " + info.response);
             return res.json(`Email has been sent to ${email}`);
