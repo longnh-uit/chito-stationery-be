@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const { signUp } = require("../../services/userService")
 
+const User = require("../../models/database/users");
+
 require("dotenv").config()
 
 
@@ -13,10 +15,7 @@ module.exports.signup_post = (req, res) => {
         expiresIn: "1h",
     });
     const transporter = nodemailer.createTransport({
-        service: "Gmail",
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
+        service: "Hotmail",
         auth: {
             user: process.env.SENDER,
             pass: process.env.PASSWORD,
@@ -24,12 +23,12 @@ module.exports.signup_post = (req, res) => {
     });
 
     const mailOptions = {
-        from: keys.SENDER,
+        from: process.env.SENDER,
         to: `${email}`,
         subject: "Chito Stationery - Activate your account",
         html: `
             <h3>Please follow link to active your account</h3>
-            <p>${process.env.SERVER_URL}/auth/activate/${token}</p>
+            <p>${process.env.SERVER_URL}/user/activate/${token}</p>
             <hr/>
         `,
     };
@@ -48,8 +47,8 @@ module.exports.signup_post = (req, res) => {
 module.exports.activate = async (req, res) => {
     try {
         const { token } = req.params;
-        const decoded = jwt.verify(token, keys.JWT_Secret);
-        const { email } = decoded;
+        const userData = jwt.verify(token, process.env.JWT_Secret);
+        const { email } = userData;
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.send(
@@ -61,6 +60,7 @@ module.exports.activate = async (req, res) => {
             "Your account has been activated, please login to use our service, thank you"
         );
     } catch (err) {
+        console.log(err);
         res.status(400).send("Your link has been expired, please signup again");
     }
 }
