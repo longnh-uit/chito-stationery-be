@@ -1,9 +1,7 @@
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-const { signUp } = require("../../services/userService")
-
-const User = require("../../models/database/users");
+const { signUp, isExist } = require("../../services/userService")
 
 require("dotenv").config()
 
@@ -53,7 +51,7 @@ module.exports.activate = async (req, res) => {
         const { token } = req.params;
         const userData = jwt.verify(token, process.env.JWT_Secret);
         const { email } = userData;
-        const existingUser = await User.findOne({ email });
+        const existingUser = await isExist(email);
         if (existingUser) {
             return res.send(
             "Your email has been taken, please use other email to signup"
