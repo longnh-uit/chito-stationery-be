@@ -20,7 +20,7 @@ async function getProductInfo(productId) {
         else throw "ProductID not found!!"
     } catch (error) {
         console.log("Error: " + error);
-        return null
+        throw error
     }
 }
 

@@ -13,6 +13,11 @@ async function signUp(user) {
     }
 }
 
+async function isExist(email) {
+    return await User.findOne({ email })
+}
+
 module.exports = {
-    signUp
+    signUp,
+    isExist
 }
