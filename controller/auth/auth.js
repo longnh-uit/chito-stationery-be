@@ -16,6 +16,10 @@ module.exports.signup_post = (req, res) => {
     });
     const transporter = nodemailer.createTransport({
         service: "Hotmail",
+        host: "smtp.office365.com",
+        port: 587,
+        requireTLS: true,
+        secure: false,
         auth: {
             user: process.env.SENDER,
             pass: process.env.PASSWORD,
