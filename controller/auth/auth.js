@@ -1,7 +1,12 @@
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-const { signUp, isExist } = require("../../services/userService")
+const { signUp, isExist, login } = require("../../services/userService")
+const {
+    verifyRefreshToken,
+    setCookie,
+    generateJWT,
+} = require("../../helper/authHelper");
 
 require("dotenv").config()
 
@@ -64,5 +69,25 @@ module.exports.activate = async (req, res) => {
     } catch (err) {
         console.log(err);
         res.status(400).send("Your link has been expired, please signup again");
+    }
+}
+
+module.exports.login_post = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await login(email, password);
+        const { username, _id } = user;
+        const userData = {
+            _id,
+            username,
+            email
+        }
+        const token = generateJWT(userData, process.env.JWT_Secret, "1d");
+        const refreshToken = generateJWT({ _id }, process.env.REFRESH_TOKEN, "1y");
+        setCookie(res, "refreshToken", refreshToken, 365);
+        setCookie(res, "usersession", token, 1);
+        res.status(200).json({ userData });
+    } catch (err) {
+        res.status(400).json({ error: err })
     }
 }

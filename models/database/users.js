@@ -22,19 +22,20 @@ userSchema.pre('save', async function (next) {
     }
 })
 
-userSchema.statics.login = async (username, password) => {
-    const user = await this.findOne({ username: username });
+/**Phương thức đăng nhập trả về user nếu thành công */ 
+userSchema.statics.login = async function (email, password) {
+    const user = await this.findOne({ email: email });
     if (user) {
         if (!user.password) {
             throw "This user has no password??!"
         }
-        const auth = bcrypt.compare(password, user.password);
+        const auth = await bcrypt.compare(password, user.password);
         if (auth) {
             return user;
         }
         throw "Incorrect password";
     }
-    throw "Incorrect username"
+    throw "Incorrect email"
 }
 
 module.exports = mongoose.model("User", userSchema)

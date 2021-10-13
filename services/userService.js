@@ -17,7 +17,12 @@ async function isExist(email) {
     return await User.findOne({ email })
 }
 
+async function login(email, password) {
+    return await User.login(email, password)
+}
+
 module.exports = {
     signUp,
-    isExist
+    isExist,
+    login
 }

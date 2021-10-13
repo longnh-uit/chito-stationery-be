@@ -25,10 +25,13 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:5000/users/login
+POST http://localhost:5000/user/login
 Content-Type: application/json
 
 {
-    "name": "Long",
-    "password": "khongbiet"
+    "email": "deosoma32@gmail.com",
+    "password": "khongbiet123"
 }
+
+###
+GET http://localhost:5000/read-cookies
