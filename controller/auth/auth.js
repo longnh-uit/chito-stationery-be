@@ -82,11 +82,9 @@ module.exports.login_post = async (req, res) => {
             username,
             email
         }
-        const token = generateJWT(userData, process.env.JWT_Secret, "1d");
+        const acccessToken = generateJWT(userData, process.env.JWT_Secret, "1d");
         const refreshToken = generateJWT({ _id }, process.env.REFRESH_TOKEN, "1y");
-        setCookie(res, "refreshToken", refreshToken, 365);
-        setCookie(res, "usersession", token, 1);
-        res.status(200).json({ userData });
+        res.status(200).json({ acccessToken: acccessToken, refreshToken: refreshToken });
     } catch (err) {
         res.status(400).json({ error: err })
     }
