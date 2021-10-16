@@ -16,7 +16,7 @@ module.exports.getProductById = async (req, res) => {
         .catch((err) => {
             res
                 .status(404)
-                .json({ error: "Sorry, the product you've searched doesn't seem to exist" });
+                .json({ error: "Sorry, the product you've searched doesn't seem to exist", success: false });
         });
 }
 
