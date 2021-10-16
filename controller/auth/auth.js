@@ -18,11 +18,11 @@ module.exports.signup_post = (req, res) => {
         expiresIn: "1h",
     });
     const transporter = nodemailer.createTransport({
-        service: "Hotmail",
-        host: "smtp.office365.com",
-        port: 587,
-        requireTLS: true,
-        secure: false,
+        service: "Gmail",
+        // host: "smtp.office365.com",
+        // port: 587,
+        // requireTLS: true,
+        // secure: false,
         auth: {
             user: process.env.SENDER,
             pass: process.env.PASSWORD,
@@ -63,9 +63,7 @@ module.exports.activate = async (req, res) => {
             );
         }
         await signUp(userData);
-        return res.send(
-            "Your account has been activated, please login to use our service, thank you"
-        );
+        return res.redirect("http://localhost:3000/");
     } catch (err) {
         console.log(err);
         res.status(400).send("Your link has been expired, please signup again");
