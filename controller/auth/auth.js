@@ -80,10 +80,10 @@ module.exports.login_post = async (req, res) => {
             username,
             email
         }
-        const acccessToken = generateJWT(userData, process.env.JWT_Secret, "1d");
+        const accessToken = generateJWT(userData, process.env.JWT_Secret, "1d");
         const refreshToken = generateJWT({ _id }, process.env.REFRESH_TOKEN, "1y");
-        res.status(200).json({ acccessToken: acccessToken, refreshToken: refreshToken });
+        res.status(200).json({ accessToken: accessToken, refreshToken: refreshToken, success: true });
     } catch (err) {
-        res.status(400).json({ error: err })
+        res.status(400).json({ error: err, success: false })
     }
 }
