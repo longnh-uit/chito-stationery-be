@@ -7,13 +7,16 @@ const userSchema = new mongoose.Schema(
     thumbnail: String,
     email: { type: String, unique: true },
     password: String,
+    gender: String,
+    phone: String,
+    dob: Date,
+    address: String,
     cart: { type: Array, default: [] },
   },
   { timestamps: true }
 );
 
 userSchema.pre('save', async function (next) {
-    console.log("Password: " + this.password)
     if (this.password) {
         this.password = await bcrypt.hash(this.password, 10);
         next();
