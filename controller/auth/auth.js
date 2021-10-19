@@ -75,12 +75,17 @@ module.exports.login_post = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await login(email, password);
-        const { username, _id } = user;
+        const { username, thumbnail, _id, gender, phone, address, dob } = user;
         const userData = {
             _id,
             username,
-            email
-        }
+            email,
+            thumbnail: thumbnail || "",
+            gender: gender || "",
+            phone: phone || "",
+            address: address || "",
+            dob: dob || ""
+        };
         const accessToken = generateJWT(userData, process.env.JWT_Secret, "1d");
         const refreshToken = generateJWT({ _id }, process.env.REFRESH_TOKEN, "1y");
         res.status(200).json({ 
@@ -91,5 +96,25 @@ module.exports.login_post = async (req, res) => {
         });
     } catch (err) {
         res.status(400).json({ error: err, success: false, message: "Login failed" })
+    }
+}
+
+module.exports.authenticate = (req, res) => {
+    const authheader = req.headers['authorization'];
+
+    if (!authheader) 
+        return res.status(401).json({ error: "You are not authenticated", success: false });
+
+    const token = authheader.split(' ')[1];
+    try {
+        var decoded = jwt.verify(token, process.env.JWT_Secret);
+    } catch (error) {
+        return res.status(401).json({ error: "You are not authenticated", success: false });
+    }
+
+    if (isExist(decoded.email)) {
+        return res.json({ user: decoded, success: true })
+    } else {
+        return res.status(401).json({ error: "You are not authenticated", success: false });
     }
 }

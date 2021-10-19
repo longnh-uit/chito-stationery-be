@@ -5,5 +5,6 @@ const { authSignup } = require("../middleware/auth")
 router.post("/signup", authSignup, authController.signup_post);
 router.get("/activate/:token", authController.activate);
 router.post("/login", authController.login_post);
+router.get("/auth", authController.authenticate);
 
 module.exports = router
