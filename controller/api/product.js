@@ -24,6 +24,7 @@ module.exports.getProductById = async (req, res, next) => {
 
 module.exports.searchProduct = async (req, res) => {
     const { q } = req.query;
+    if (q === "" || q == null) return res.json({ searchedProducts: [] });
     const searchedProducts = await findProductByName(q.replace(/%20/, " "));
     return res.json({ searchedProducts })
 }
