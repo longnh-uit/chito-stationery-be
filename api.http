@@ -1,4 +1,4 @@
-GET http://localhost:5000/product/search?q=
+GET http://localhost:5000/product/filter?type=sticker&type=washi%20tape&lowerPrice=20000
 
 ###
 
