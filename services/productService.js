@@ -82,12 +82,12 @@ async function filterProduct(filter) {
     if (type) {
         products = await products.filter(product => {
             if (typeof type == "string") {
-                return product.productName.toLowerCase().includes(type);
+                return product.type == type;
             }
             else {
                 try {
                     type.forEach(e => {
-                    if (product.productName.toLowerCase().includes(e))
+                    if (product.type == e)
                         throw true;
                     })
                     return false;
