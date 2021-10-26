@@ -76,11 +76,45 @@ async function deleteProduct(id) {
     }
 }
 
+async function filterProduct(filter) {
+    let products = await getAllProduct();
+    const { type, higherPrice, lowerPrice } = filter;
+    if (type) {
+        products = await products.filter(product => {
+            if (typeof type == "string") {
+                return product.productName.toLowerCase().includes(type);
+            }
+            else {
+                try {
+                    type.forEach(e => {
+                    if (product.productName.toLowerCase().includes(e))
+                        throw true;
+                    })
+                    return false;
+                } catch (result) {
+                    return result;
+                }
+            }
+        })
+    }
+    
+    if (higherPrice) {
+        products = await products.filter(product => product.price >= Number(higherPrice));
+    }
+
+    if (lowerPrice) {
+        products = await products.filter(product => product.price <= Number(lowerPrice));
+    }
+
+    return products;
+}
+
 module.exports = {
     getAllProduct,
     getProductInfo,
     findProductByName,
     addProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    filterProduct
 }
