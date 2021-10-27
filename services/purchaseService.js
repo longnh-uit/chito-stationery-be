@@ -11,4 +11,13 @@ async function purchase(bill) {
     }
 }
 
-module.exports = { purchase }
+async function history(email) {
+    if (!email) {
+        const bills = await PurchaseHistory.find();
+        return bills;
+    }
+    const bills= await PurchaseHistory.find({ customerEmail: email});
+    return bills;
+}
+
+module.exports = { purchase, history }
