@@ -14,6 +14,8 @@ app.use(cookieParser(process.env.COOKIE_KEY))
 
 app.use('/user', require('./routes/auth'));
 app.use('/product', require('./routes/product'));
+app.use('/purchase', require('./routes/purchase'));
+
 
 app.get('/read-cookies', (req, res) => {
     const cookies = req.signedCookies;
