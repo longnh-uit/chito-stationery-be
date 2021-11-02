@@ -75,7 +75,7 @@ module.exports.login_post = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await login(email, password);
-        const { username, thumbnail, _id, gender, phone, address, dob } = user;
+        const { fullname, thumbnail, _id, gender, phone, address, dob } = user;
         const userData = {
             _id,
             fullname,
