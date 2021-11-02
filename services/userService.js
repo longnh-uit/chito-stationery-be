@@ -32,9 +32,19 @@ async function changePassword(email, oldPassword, newPassword) {
     }
 }
 
+async function updateInfo(email, info) {
+    try {
+        await User.updateOne({ email }, info);
+        return true;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     signUp,
     isExist,
     login,
-    changePassword
+    changePassword,
+    updateInfo
 }

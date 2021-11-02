@@ -1,11 +1,12 @@
 const User = require("../models/database/users");
+const jwt = require("jsonwebtoken");
 
 const authSignup = async (req, res, next) => {
     // Initialize regular expressions for username, email and password
     const user = req.body
     const emailRegEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const passwordRegEx = /^(?=.*\d)(?=.*[a-zA-Z]).{6,}$/;
-    const usernameRegEx = /.{3,35}/;
+    const fullnameRegEx = /.{3,35}/;
     const phoneRegEx = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
 
     function errorHandler(res, error) {
@@ -16,7 +17,7 @@ const authSignup = async (req, res, next) => {
     }
 
     // Check if not match regex
-    if (!usernameRegEx.test(user.username))
+    if (!fullnameRegEx.test(user.fullname))
         return errorHandler(res, "Username must be from 3 to 35 character");
     if (!emailRegEx.test(user.email))
         return errorHandler(res, "Must be a valid email");
@@ -36,4 +37,13 @@ const authSignup = async (req, res, next) => {
     next();
 }
 
-module.exports = { authSignup };
+const authToken = async (req, res, next) => {
+    const { accessToken } = req.body;
+    const email = jwt.verify(accessToken, process.env.JWT_Secret).email;
+    if (email == req.body.email)
+        next();
+    else return res.status(401).json({ error: "You are not authenticated", success: false })
+
+}
+
+module.exports = { authSignup, authToken };
