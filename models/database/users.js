@@ -3,11 +3,10 @@ const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true },
+    fullname: { type: String, required: true },
     thumbnail: String,
     email: { type: String, unique: true },
     password: String,
-    gender: String,
     phone: String,
     dob: Date,
     address: String,
@@ -25,6 +24,7 @@ userSchema.pre('save', async function (next) {
     }
 })
 
+
 /**Phương thức đăng nhập trả về user nếu thành công */ 
 userSchema.statics.login = async function (email, password) {
     const user = await this.findOne({ email: email });
@@ -39,6 +39,19 @@ userSchema.statics.login = async function (email, password) {
         throw "Incorrect password";
     }
     throw "Incorrect email"
+}
+
+userSchema.statics.changePassword = async function (email, password) {
+    const passwordRegEx = /^(?=.*\d)(?=.*[a-zA-Z]).{6,}$/;
+    if (!passwordRegEx.test(password))
+        throw "Password must contains letters, digits and at least 6 characters";
+    password = await bcrypt.hash(password, 10);
+    try {
+        await this.updateOne({ email }, { $set: { password: password } });
+    } catch (error) {
+        throw error;
+    }
+    
 }
 
 module.exports = mongoose.model("User", userSchema)

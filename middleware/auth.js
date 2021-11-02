@@ -26,8 +26,6 @@ const authSignup = async (req, res, next) => {
             .json("Password must contains letters, digits and at least 6 characters");
     if (user.phone && !phoneRegEx.test(user.phone))
         return errorHandler(res, "Phone number is not valid");
-    if (user.gender && !["male", "female", "other"].includes(user.gender.toLowerCase()))
-        return errorHandler(res, "Gender is not valid");
     if (user.dob && (user.dob = new Date(user.dob)) == "Invalid Date")
         return errorHandler(res, "Date of birth is not valid");
 

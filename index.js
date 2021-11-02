@@ -12,7 +12,8 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser(process.env.COOKIE_KEY))
 
-app.use('/user', require('./routes/auth'));
+app.use('/auth', require('./routes/auth'));
+app.use('/user', require('./routes/user'));
 app.use('/product', require('./routes/product'));
 app.use('/purchase', require('./routes/purchase'));
 

@@ -5,7 +5,6 @@ const purchaseHistorySchema = new mongoose.Schema({
     customerEmail: {type: String, required: true},
     customerName: {type: String, required: true},
     customerPhone: String,
-    gender: String,
     productList: [
         {
             product: mongoose.Types.ObjectId,
