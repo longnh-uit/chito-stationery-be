@@ -16,12 +16,7 @@ app.use('/auth', require('./routes/auth'));
 app.use('/user', require('./routes/user'));
 app.use('/product', require('./routes/product'));
 app.use('/purchase', require('./routes/purchase'));
-
-
-app.get('/read-cookies', (req, res) => {
-    const cookies = req.signedCookies;
-    res.json(cookies);
-})
+app.use('/contact', require('./routes/contact'));
 
 const PORT = process.env.PORT || 5000;
 
