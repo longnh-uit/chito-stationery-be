@@ -25,7 +25,6 @@ async function changePassword(email, oldPassword, newPassword) {
     
     try {
         await login(email, oldPassword);
-        if (oldPassword == newPassword) throw "New password"
         await User.changePassword(email, newPassword);
         return true;
     } catch (error) {
