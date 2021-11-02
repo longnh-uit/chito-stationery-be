@@ -38,8 +38,19 @@ const authSignup = async (req, res, next) => {
 }
 
 const authToken = async (req, res, next) => {
-    const { accessToken } = req.body;
-    const email = jwt.verify(accessToken, process.env.JWT_Secret).email;
+    const authheader = req.headers['authorization'];
+
+    if (!authheader) 
+        return res.status(401).json({ error: "You are not authenticated", success: false });
+
+    const token = authheader.split(' ')[1];
+    try {
+        var decoded = jwt.verify(token, process.env.JWT_Secret);
+    } catch (error) {
+        return res.status(401).json({ error: "You are not authenticated", success: false });
+    }
+
+    const email = decoded.email;
     if (email == req.body.email)
         next();
     else return res.status(401).json({ error: "You are not authenticated", success: false })
