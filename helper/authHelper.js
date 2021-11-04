@@ -4,6 +4,17 @@ const generateJWT = (value, secretKey, timeLife) => {
     return jwt.sign(value, secretKey, { expiresIn: timeLife });
 };
 
+const verifyJWT = (value, secretKey) => {
+    return new Promise((resolve, reject) => {
+        jwt.verify(value, secretKey, (err, decoded) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(decoded);
+        })
+    })
+}
+
 const verifyRefreshToken = (refToken, key) => {
     return new Promise((resolve, reject) => {
         jwt.verify(refToken, key, (err, decoded) => {
@@ -26,6 +37,7 @@ const setCookie = (res, name, value, timeLife) => {
 
 module.exports = {
     verifyRefreshToken,
+    verifyJWT,
     setCookie,
     generateJWT,
 };

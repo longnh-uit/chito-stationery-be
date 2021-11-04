@@ -1,5 +1,5 @@
 const User = require("../models/database/users");
-const jwt = require("jsonwebtoken");
+const { verifyJWT } = require("../helper/authHelper");
 
 const authSignup = async (req, res, next) => {
     // Initialize regular expressions for username, email and password
@@ -44,17 +44,17 @@ const authToken = async (req, res, next) => {
         return res.status(401).json({ error: "You are not authenticated", success: false });
 
     const token = authheader.split(' ')[1];
-    try {
-        var decoded = jwt.verify(token, process.env.JWT_Secret);
-    } catch (error) {
-        return res.status(401).json({ error: "You are not authenticated", success: false });
-    }
-
-    const email = decoded.email;
-    if (email == req.body.email)
-        next();
-    else return res.status(401).json({ error: "You are not authenticated", success: false })
-
+    verifyJWT(token, process.env.JWT_Secret)
+        .then(decoded => {
+            const email = decoded.email;
+            if (email == req.body.email)
+                next();
+            else return res.status(401).json({ error: "You are not authenticated", success: false })
+        })
+        .catch(error => {
+            console.log(error);
+            return res.status(401).json({ error: "You are not authenticated", success: false });
+    })
 }
 
 module.exports = { authSignup, authToken };

@@ -1,9 +1,9 @@
 const passport = require("passport");
-const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const { signUp, isExist, login } = require("../../services/userService")
 const {
     verifyRefreshToken,
+    verifyJWT,
     setCookie,
     generateJWT,
 } = require("../../helper/authHelper");
@@ -14,9 +14,7 @@ require("dotenv").config()
 module.exports.signup_post = (req, res) => {
     const userData = req.body;
     const { email } = userData;
-    const token = jwt.sign(userData, process.env.JWT_Secret, {
-        expiresIn: "1h",
-    });
+    const token = generateJWT(userData, process.env.JWT_Secret, "1h");
     const transporter = nodemailer.createTransport({
         service: "Gmail",
         // host: "smtp.office365.com",
@@ -35,7 +33,7 @@ module.exports.signup_post = (req, res) => {
         subject: "Chito Stationery - Activate your account",
         html: `
             <h3>Please follow link to active your account</h3>
-            <p>${process.env.SERVER_URL}/user/activate/${token}</p>
+            <p>${process.env.SERVER_URL}/auth/activate/${token}</p>
             <hr/>
         `,
     };
@@ -54,7 +52,7 @@ module.exports.signup_post = (req, res) => {
 module.exports.activate = async (req, res) => {
     try {
         const { token } = req.params;
-        const userData = jwt.verify(token, process.env.JWT_Secret);
+        const userData = await verifyJWT(token, process.env.JWT_Secret);
         const { email } = userData;
         const existingUser = await isExist(email);
         if (existingUser) {
@@ -99,15 +97,15 @@ module.exports.login_post = async (req, res) => {
     }
 }
 
-module.exports.authenticate = (req, res) => {
+module.exports.authenticate = async (req, res) => {
     const authheader = req.headers['authorization'];
 
     if (!authheader) 
-        return res.status(401).json({ error: "You are not authenticated", success: false });
+        return res.status(401).json({ error: "No token provided.", success: false });
 
     const token = authheader.split(' ')[1];
     try {
-        var decoded = jwt.verify(token, process.env.JWT_Secret);
+        var decoded = await verifyJWT(token, process.env.JWT_Secret);
     } catch (error) {
         return res.status(401).json({ error: "You are not authenticated", success: false });
     }
