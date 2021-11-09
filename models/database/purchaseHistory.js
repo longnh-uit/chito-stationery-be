@@ -14,7 +14,7 @@ const purchaseHistorySchema = new mongoose.Schema({
             price: { type: mongoose.Types.Decimal128, required: true, min: 0 },
             image: { type: String, required: true },
             quantity: { type: Number },
-            totalCost: { type: mongoose.Types.Decimal128 }
+            totalPriceByItem: { type: mongoose.Types.Decimal128 }
         }
     ],
     totalCost: { type: mongoose.Types.Decimal128, required: true, min: 0 },
