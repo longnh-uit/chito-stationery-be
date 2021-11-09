@@ -7,9 +7,14 @@ const purchaseHistorySchema = new mongoose.Schema({
     customerPhone: String,
     productList: [
         {
-            product: mongoose.Types.ObjectId,
-            price: mongoose.Types.Decimal128,
-            quantity: Number
+            productName: { type: String, required: true },
+            type: { type: String },
+            description: { type: String },
+            detail: { type: String },
+            price: { type: mongoose.Types.Decimal128, required: true, min: 0 },
+            image: { type: String, required: true },
+            quantity: { type: Number },
+            totalCost: { type: mongoose.Types.Decimal128 }
         }
     ],
     totalCost: { type: mongoose.Types.Decimal128, required: true, min: 0 },
