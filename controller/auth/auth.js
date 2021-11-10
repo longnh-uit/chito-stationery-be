@@ -1,15 +1,16 @@
 const passport = require("passport");
 const nodemailer = require("nodemailer");
-const { signUp, isExist, login } = require("../../services/userService")
+const { signUp, isExist, login } = require("../../services/userService");
+const { saveToken, checkToken, updateToken } = require("../../services/refreshTokenService");
 const {
     verifyRefreshToken,
     verifyJWT,
     setCookie,
     generateJWT,
 } = require("../../helper/authHelper");
+const { json } = require("express");
 
 require("dotenv").config()
-
 
 module.exports.signup_post = (req, res) => {
     const userData = req.body;
@@ -76,6 +77,7 @@ module.exports.login_post = async (req, res) => {
         const { _id } = user;
         const accessToken = generateJWT({ email }, process.env.JWT_Secret, "1d");
         const refreshToken = generateJWT({ _id }, process.env.REFRESH_TOKEN, "1y");
+        await saveToken(email, refreshToken);
         res.status(200).json({ 
             accessToken: accessToken,
             refreshToken: refreshToken,
@@ -105,5 +107,34 @@ module.exports.authenticate = async (req, res) => {
         return res.json({ user: user, success: true })
     } else {
         return res.status(401).json({ error: "You are not authenticated", success: false });
+    }
+}
+
+module.exports.refresh = async (req, res) => {
+    const authheader = req.headers['authorization'];
+
+    if (!authheader) 
+        return res.status(401).json({ error: "No token provided.", success: false });
+
+    const refToken = authheader.split(' ')[1];
+
+    try {
+        const email = await checkToken(refToken);
+        const _id = await verifyRefreshToken(refToken, process.env.REFRESH_TOKEN);
+
+        if (email) {
+            const accessToken = generateJWT({ email }, process.env.JWT_Secret, "1d");
+            const refreshToken = generateJWT({ _id }, process.env.REFRESH_TOKEN, "1y");
+            await saveToken(email, refreshToken);
+            res.json({
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+                success: true,
+                message: "Token refreshed"
+            });
+        } else throw "Token expired";
+
+    } catch (error) {
+        res.status(401).json({ error: error, success: false });
     }
 }

@@ -6,5 +6,6 @@ router.post("/signup", authSignup, authController.signup_post);
 router.get("/activate/:token", authController.activate);
 router.post("/login", authController.login_post);
 router.get("/", authController.authenticate);
+router.post("/refresh",authController.refresh);
 
 module.exports = router
