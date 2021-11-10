@@ -1,13 +1,13 @@
 const RefreshToken = require("../models/database/refreshTokens");
 
-async function saveToken(email, refreshToken) {
+async function saveToken(email, refreshToken, accessToken) {
     const check = await RefreshToken.findOne({ email });
     if (!check) {
-        const token = new RefreshToken({ refreshToken, email });
+        const token = new RefreshToken({ refreshToken, accessToken, email });
         await token.save();
         return token;
     } else {
-        return await updateToken(email, refreshToken);
+        return await updateToken(email, refreshToken, accessToken);
     }
 }
 
@@ -17,12 +17,18 @@ async function checkToken(refreshToken) {
     return null;
 }
 
-async function updateToken(email, refreshToken) {
+async function checkTokenByEmail(email) {
+    const token = await RefreshToken.findOne({ email });
+    if (token) return token.accessToken;
+    return null;
+}
+
+async function updateToken(email, refreshToken, accessToken) {
     try {
-        return await RefreshToken.updateOne({ email }, { refreshToken });
+        return await RefreshToken.updateOne({ email }, { refreshToken, accessToken });
     } catch (error) {
         console.log(error);
     }
 }
 
-module.exports = { saveToken, checkToken, updateToken }
+module.exports = { saveToken, checkToken, updateToken, checkTokenByEmail }

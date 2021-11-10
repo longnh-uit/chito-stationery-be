@@ -1,7 +1,7 @@
 const passport = require("passport");
 const nodemailer = require("nodemailer");
 const { signUp, isExist, login } = require("../../services/userService");
-const { saveToken, checkToken, updateToken } = require("../../services/refreshTokenService");
+const { saveToken, checkToken, checkTokenByEmail } = require("../../services/refreshTokenService");
 const {
     verifyRefreshToken,
     verifyJWT,
@@ -77,7 +77,7 @@ module.exports.login_post = async (req, res) => {
         const { _id } = user;
         const accessToken = generateJWT({ email }, process.env.JWT_Secret, "1d");
         const refreshToken = generateJWT({ _id }, process.env.REFRESH_TOKEN, "1y");
-        await saveToken(email, refreshToken);
+        await saveToken(email, refreshToken, accessToken);
         res.status(200).json({ 
             accessToken: accessToken,
             refreshToken: refreshToken,
@@ -103,7 +103,7 @@ module.exports.authenticate = async (req, res) => {
     }
 
     const user = await isExist(decoded.email);
-    if (user) {
+    if (user && (token == await checkTokenByEmail(decoded.email))) {
         return res.json({ user: user, success: true })
     } else {
         return res.status(401).json({ error: "You are not authenticated", success: false });
@@ -125,7 +125,7 @@ module.exports.refresh = async (req, res) => {
         if (email) {
             const accessToken = generateJWT({ email }, process.env.JWT_Secret, "1d");
             const refreshToken = generateJWT({ _id }, process.env.REFRESH_TOKEN, "1y");
-            await saveToken(email, refreshToken);
+            await saveToken(email, refreshToken, accessToken);
             res.json({
                 accessToken: accessToken,
                 refreshToken: refreshToken,
