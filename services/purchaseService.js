@@ -1,12 +1,6 @@
 const PurchaseHistory = require("../models/database/purchaseHistory");
-const { getProductInfo } = require("./productService");
 
 async function purchase(bill) {
-    let productArray = [];
-    bill.productList.forEach(product => {
-        productArray.push(product);
-    });
-    bill.productList = productArray;
     try {
         const newBill = new PurchaseHistory(bill);
         await newBill.save()

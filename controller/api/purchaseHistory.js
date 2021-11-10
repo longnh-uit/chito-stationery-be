@@ -5,6 +5,7 @@ const {
 
 module.exports.purchase = async (req, res) => {
     const bill = req.body;
+    if (!bill.customerEmail) bill.customerEmail = "";
     try {
         if (!(purchase(bill))) throw "Purchase failed!"
         return res.json({ message: "Purchase successful!", success: true });

@@ -73,18 +73,8 @@ module.exports.login_post = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await login(email, password);
-        const { fullname, thumbnail, _id, gender, phone, address, dob } = user;
-        const userData = {
-            _id,
-            fullname,
-            email,
-            thumbnail: thumbnail || "",
-            gender: gender || "",
-            phone: phone || "",
-            address: address || "",
-            dob: dob || ""
-        };
-        const accessToken = generateJWT(userData, process.env.JWT_Secret, "1d");
+        const { _id } = user;
+        const accessToken = generateJWT({ email }, process.env.JWT_Secret, "1d");
         const refreshToken = generateJWT({ _id }, process.env.REFRESH_TOKEN, "1y");
         res.status(200).json({ 
             accessToken: accessToken,
@@ -110,8 +100,9 @@ module.exports.authenticate = async (req, res) => {
         return res.status(401).json({ error: "You are not authenticated", success: false });
     }
 
-    if (isExist(decoded.email)) {
-        return res.json({ user: decoded, success: true })
+    const user = await isExist(decoded.email);
+    if (user) {
+        return res.json({ user: user, success: true })
     } else {
         return res.status(401).json({ error: "You are not authenticated", success: false });
     }
