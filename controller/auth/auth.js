@@ -111,12 +111,10 @@ module.exports.authenticate = async (req, res) => {
 }
 
 module.exports.refresh = async (req, res) => {
-    const authheader = req.headers['authorization'];
+    const refToken = req.body.refreshToken;
 
-    if (!authheader) 
+    if (!refToken) 
         return res.status(401).json({ error: "No token provided.", success: false });
-
-    const refToken = authheader.split(' ')[1];
 
     try {
         const email = await checkToken(refToken);
