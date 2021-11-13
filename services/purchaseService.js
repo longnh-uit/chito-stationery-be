@@ -19,4 +19,10 @@ async function history(email) {
     return bills;
 }
 
-module.exports = { purchase, history }
+async function getHistoryById(id) {
+    const info = await PurchaseHistory.findById(id);
+    if (info) return info;
+    else throw "Id not found.";
+}
+
+module.exports = { purchase, history, getHistoryById }
