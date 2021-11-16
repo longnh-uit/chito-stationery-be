@@ -25,7 +25,10 @@ module.exports.history = async (req, res) => {
             return res.status(400).json({ error: error, success: false })
         }
     } else {
-        if (!id) return res.status(404).json({ error: "No id or email provided", success: false });
+        if (!id) {
+            const bills = await history();
+            return res.json(bills);
+        }
         try {
             const bill = await getHistoryById(id);
             return res.json(bill);
