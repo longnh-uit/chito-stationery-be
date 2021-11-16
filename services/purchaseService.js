@@ -25,4 +25,54 @@ async function getHistoryById(id) {
     else throw "Id not found.";
 }
 
-module.exports = { purchase, history, getHistoryById }
+async function getHistoryCurrentWeek() {
+
+    function getMonday(d) {
+        d = new Date(d);
+        var day = d.getDay(),
+            diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+        d.setDate(diff);
+        return d;
+    }
+
+    const bills = await PurchaseHistory.aggregate([
+        {
+            $match: {
+                createdAt: {
+                    $gte: getMonday(new Date())
+                }
+            }
+        }
+    ]);
+
+    return bills;
+}
+
+async function getHistoryCurrentMonth() {
+    
+    function getFirstDateOfMonth() {
+        let date = new Date();
+        let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        return firstDay;
+    }
+
+    const bills = await PurchaseHistory.aggregate([
+        {
+            $match: {
+                createdAt: {
+                    $gte: getFirstDateOfMonth()
+                }
+            }
+        }
+    ]);
+
+    return bills;
+}
+
+module.exports = { 
+    purchase,
+    history, 
+    getHistoryById, 
+    getHistoryCurrentWeek,
+    getHistoryCurrentMonth
+}

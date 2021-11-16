@@ -1,7 +1,9 @@
 const {
     purchase,
     history,
-    getHistoryById
+    getHistoryById,
+    getHistoryCurrentWeek,
+    getHistoryCurrentMonth
 } = require("../../services/purchaseService");
 
 module.exports.purchase = async (req, res) => {
@@ -35,5 +37,23 @@ module.exports.history = async (req, res) => {
         } catch (error) {
             res.status(404).json({ error: error, success: false })
         }
+    }
+}
+
+module.exports.getHistoryCurrentWeek = async (req, res) => {
+    try {
+        const bills = await getHistoryCurrentWeek();
+        res.json(bills);
+    } catch(error) {
+        res.status(400).json({ error: error, success: false });
+    }
+}
+
+module.exports.getHistoryCurrentMonth = async (req, res) => {
+    try {
+        const bills = await getHistoryCurrentMonth();
+        res.json(bills);
+    } catch (error) {
+        res.status(400).json({ error: error, success: false });
     }
 }
