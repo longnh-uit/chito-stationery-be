@@ -2,17 +2,17 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
-  {
-    fullname: { type: String, required: true },
-    thumbnail: String,
-    email: { type: String, unique: true },
-    password: String,
-    phone: String,
-    dob: Date,
-    address: String,
-    cart: { type: Array, default: [] },
-  },
-  { timestamps: true }
+    {
+        fullname: { type: String, required: true },
+        thumbnail: String,
+        email: { type: String, unique: true },
+        password: String,
+        phone: String,
+        dob: Date,
+        address: String,
+        orders: Number,
+    },
+    { timestamps: true }
 );
 
 userSchema.pre('save', async function (next) {
@@ -25,7 +25,7 @@ userSchema.pre('save', async function (next) {
 })
 
 
-/**Phương thức đăng nhập trả về user nếu thành công */ 
+/**Phương thức đăng nhập trả về user nếu thành công */
 userSchema.statics.login = async function (email, password) {
     const user = await this.findOne({ email: email });
     if (user) {
@@ -51,7 +51,7 @@ userSchema.statics.changePassword = async function (email, password) {
     } catch (error) {
         throw error;
     }
-    
+
 }
 
 module.exports = mongoose.model("User", userSchema)

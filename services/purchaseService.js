@@ -1,9 +1,11 @@
 const PurchaseHistory = require("../models/database/purchaseHistory");
+const User = require("../models/database/users");
 
 async function purchase(bill) {
     try {
         const newBill = new PurchaseHistory(bill);
         await newBill.save()
+        await User.updateOne({ email: customerEmail }, { $inc: { orders: 1 }});
     } catch (error) {
         console.log("Error: " + error);
         return false;
@@ -74,5 +76,5 @@ module.exports = {
     history, 
     getHistoryById, 
     getHistoryCurrentWeek,
-    getHistoryCurrentMonth
+    getHistoryCurrentMonth,
 }

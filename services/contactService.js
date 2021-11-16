@@ -10,4 +10,9 @@ async function addContact(contact) {
     }
 }
 
-module.exports = { addContact }
+async function getAllContacts() {
+    const contacts = await Contact.find();
+    return contacts;
+}
+
+module.exports = { addContact, getAllContacts }

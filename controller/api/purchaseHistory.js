@@ -3,7 +3,7 @@ const {
     history,
     getHistoryById,
     getHistoryCurrentWeek,
-    getHistoryCurrentMonth
+    getHistoryCurrentMonth,
 } = require("../../services/purchaseService");
 
 module.exports.purchase = async (req, res) => {

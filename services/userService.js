@@ -3,6 +3,8 @@ const User = require('../models/database/users');
 /**Hàm đăng kí user, thành công sẽ trả về user vừa đăng kí, thất bại trả về false */
 async function signUp(user) {
     try {
+        if (user.orders == null)
+            user.orders = 0;
         const newUser = new User(user);
         await newUser.save();
         console.log("User created");
@@ -41,10 +43,16 @@ async function updateInfo(email, info) {
     }
 }
 
+async function getAllUser() {
+    const users = await User.find();
+    return users;
+}
+
 module.exports = {
     signUp,
     isExist,
     login,
     changePassword,
-    updateInfo
+    updateInfo,
+    getAllUser
 }
