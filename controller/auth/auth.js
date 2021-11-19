@@ -57,7 +57,7 @@ module.exports.activate = async (req, res) => {
         const { email } = userData;
         const existingUser = await isExist(email);
         if (existingUser) {
-            return res.status(400).send({
+            return res.status(400).json({
                 success: false,
                 error: "Your email has been taken, please use other email to signup"
             });
