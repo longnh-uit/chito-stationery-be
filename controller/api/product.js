@@ -51,7 +51,7 @@ module.exports.addProduct = async (req, res) => {
 }
 
 module.exports.deleteProduct = async (req, res) => {
-    await deleteProduct(req.body)
+    await deleteProduct(req.body.id)
     res.json({message:"Delete successfully!", success:true});
 }
 module.exports.updateProduct = async (req, res) => {
