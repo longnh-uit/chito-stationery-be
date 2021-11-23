@@ -5,6 +5,7 @@ const {
     getHistoryCurrentWeek,
     getHistoryCurrentMonth,
 } = require("../../services/purchaseService");
+const { getPage } = require("../../helper/utils");
 
 module.exports.purchase = async (req, res) => {
     const bill = req.body;
@@ -21,15 +22,19 @@ module.exports.history = async (req, res) => {
     const { email, id } = req.query;
     if (email) {
         try {
-            const bills = await history(email);
-            return res.json(bills);
+            let bills = await history(email);
+            const maxPage = Math.round((products.length + 1) / 5);
+            bills = await getPage(bills, page || 1, 5);
+            return res.json({ orders: bills, maxPage });
         } catch (error) {
             return res.status(400).json({ error: error, success: false })
         }
     } else {
         if (!id) {
-            const bills = await history();
-            return res.json(bills);
+            let bills = await history();
+            const maxPage = Math.round((products.length + 1) / 5);
+            bills = await getPage(bills, page || 1, 5);
+            return res.json({ orders: bills, maxPage });
         }
         try {
             const bill = await getHistoryById(id);
@@ -43,7 +48,11 @@ module.exports.history = async (req, res) => {
 module.exports.getHistoryCurrentWeek = async (req, res) => {
     try {
         const bills = await getHistoryCurrentWeek();
-        res.json(bills);
+        let sales = 0;
+        bills.forEach(x => {
+            sales += +x.totalCost.toString();
+        })
+        res.json({ orders: bills, sales });
     } catch(error) {
         res.status(400).json({ error: error, success: false });
     }
@@ -52,7 +61,11 @@ module.exports.getHistoryCurrentWeek = async (req, res) => {
 module.exports.getHistoryCurrentMonth = async (req, res) => {
     try {
         const bills = await getHistoryCurrentMonth();
-        res.json(bills);
+        let sales = 0;
+        bills.forEach(x => {
+            sales += +x.totalCost.toString();
+        })
+        res.json({ orders: bills, sales });
     } catch (error) {
         res.status(400).json({ error: error, success: false });
     }

@@ -8,6 +8,8 @@ const {
     filterProduct
 } = require("../../services/productService");
 
+const { getPage } = require("../../helper/utils");
+
 module.exports.getProductById = async (req, res, next) => {
     const { id } = req.query;
     if (id)
@@ -26,13 +28,16 @@ module.exports.getProductById = async (req, res, next) => {
 module.exports.searchProduct = async (req, res) => {
     const { q } = req.query;
     if (q === "" || q == null) return res.json({ searchedProducts: [] });
-    const searchedProducts = await findProductByName(q.replace(/%20/, " "));
-    return res.json({ searchedProducts })
+    let searchedProducts = await findProductByName(q.replace(/%20/, " "));
+    return res.json({ searchedProducts });
 }
 
 module.exports.getAllProduct = async (req, res) => {
-    const products = await getAllProduct();
-    res.json({ products });
+    const { page } = req.query;
+    let products = await getAllProduct();
+    const maxPage = Math.round((products.length + 1) / 5);
+    products = await getPage(products, page || 1, 5);
+    res.json({ products, maxPage });
 }
 
 module.exports.filterProduct = async (req, res) => {
