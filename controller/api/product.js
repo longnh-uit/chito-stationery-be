@@ -1,6 +1,6 @@
 const {
     getAllProduct,
-    getProductdata,
+    getProductInfo,
     findProductByName,
     addProduct,
     updateProduct,
@@ -13,7 +13,7 @@ const { getPage } = require("../../helper/utils");
 module.exports.getProductById = async (req, res, next) => {
     const { id } = req.query;
     if (id)
-        getProductdata(id)
+        getProductInfo(id)
             .then((product) => {
                 res.json(product);
             })
