@@ -46,13 +46,17 @@ module.exports.filterProduct = async (req, res) => {
 }
 
 module.exports.addProduct = async (req, res) => {
-    await addProduct(req.body) 
-    res.json({message:"Add successfully!", success:true});
+    await addProduct(req.body); 
+    res.json({ message:"Add successfully!", success:true });
 }
 
 module.exports.deleteProduct = async (req, res) => {
-    await deleteProduct(req.body.id)
-    res.json({message:"Delete successfully!", success:true});
+    try {
+        await deleteProduct(req.body.id);
+        return res.json({ message: "Delete successfully!", success: true });
+    } catch (error) {
+        return res.status(400).json({ error: "ID not found", success: false });
+    }
 }
 module.exports.updateProduct = async (req, res) => {
     const id = req.body.id;

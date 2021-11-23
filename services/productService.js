@@ -69,10 +69,10 @@ async function deleteProduct(id) {
             console.log("Delete product successful!")
             return true
         }
-        else throw "ProductId not found!";
+        else throw new Error("ProductId not found!");
     } catch (error) {
-        console.log("Error: " + error)
-        return false;
+        console.log("Error: " + error.message);
+        throw error;
     }
 }
 

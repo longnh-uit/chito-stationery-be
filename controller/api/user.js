@@ -8,7 +8,7 @@ module.exports.changePassword = async (req, res) => {
     if (email && oldPassword && newPassword) {
         try {
             if (await changePassword(email, oldPassword, newPassword))
-                return res.json({ msg: "Change password successful!", success: true });
+                return res.json({ msg: "Change password successfully!", success: true });
         } catch (error) {
             return res.status(400).json({ error: error, success: false });
         }
@@ -38,7 +38,7 @@ module.exports.updateInfo = async (req, res) => {
 
     updateInfo(email, info)
         .then(() => {
-            return res.json({ msg: "Update successful!", success: true });
+            return res.json({ msg: "Update successfully!", success: true });
         })
         .catch(error => {
             res.status(400).json({ error: error, success: false });
