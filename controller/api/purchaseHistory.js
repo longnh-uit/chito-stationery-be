@@ -23,7 +23,7 @@ module.exports.history = async (req, res) => {
     if (email) {
         try {
             let bills = await history(email);
-            const maxPage = Math.round((products.length + 1) / 5);
+            const maxPage = Math.round((bills.length + 1) / 5);
             bills = await getPage(bills, page || 1, 5);
             return res.json({ orders: bills, maxPage });
         } catch (error) {
@@ -32,7 +32,7 @@ module.exports.history = async (req, res) => {
     } else {
         if (!id) {
             let bills = await history();
-            const maxPage = Math.round((products.length + 1) / 5);
+            const maxPage = Math.round((bills.length + 1) / 5);
             bills = await getPage(bills, page || 1, 5);
             return res.json({ orders: bills, maxPage });
         }
