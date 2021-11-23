@@ -19,7 +19,7 @@ module.exports.purchase = async (req, res) => {
 }
 
 module.exports.history = async (req, res) => {
-    const { email, id } = req.query;
+    const { email, id, page } = req.query;
     if (email) {
         try {
             let bills = await history(email);

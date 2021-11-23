@@ -14,10 +14,10 @@ async function purchase(bill) {
 
 async function history(email) {
     if (!email) {
-        const bills = await PurchaseHistory.find();
+        const bills = await PurchaseHistory.find().sort({ createdAt: -1});
         return bills;
     }
-    const bills = await PurchaseHistory.find({ customerEmail: email });
+    const bills = await PurchaseHistory.find({ customerEmail: email }).sort({ createdAt: -1 });
     return bills;
 }
 
@@ -45,7 +45,7 @@ async function getHistoryCurrentWeek() {
                 }
             }
         }
-    ]);
+    ]).sort({ createdAt: -1 });
 
     return bills;
 }
@@ -66,7 +66,7 @@ async function getHistoryCurrentMonth() {
                 }
             }
         }
-    ]);
+    ]).sort({ createdAt: -1 });
 
     return bills;
 }

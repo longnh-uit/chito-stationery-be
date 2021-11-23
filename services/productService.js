@@ -3,7 +3,7 @@ const Product = require("../models/database/products")
 /**Hàm trả về toàn bộ sản phẩm, nếu thất bại thì trả về null */
 async function getAllProduct() {
     try {
-        const products = await Product.find();
+        const products = await Product.find().sort({ createdAt: -1, id: -1 });
         if (products) return products;
         else throw "No such a product!!"
     } catch (error) {

@@ -11,7 +11,7 @@ async function addContact(contact) {
 }
 
 async function getAllContacts() {
-    const contacts = await Contact.find();
+    const contacts = await Contact.find().sort({ updatedAt: -1 });
     return contacts;
 }
 
