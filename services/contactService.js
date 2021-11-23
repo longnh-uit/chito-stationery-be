@@ -15,4 +15,9 @@ async function getAllContacts() {
     return contacts;
 }
 
-module.exports = { addContact, getAllContacts }
+async function getContactById(id) {
+    const contact = await Contact.findById(id);
+    return contact;
+}
+
+module.exports = { addContact, getAllContacts, getContactById }

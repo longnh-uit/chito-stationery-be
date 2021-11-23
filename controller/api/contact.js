@@ -1,4 +1,4 @@
-const { addContact, getAllContacts } = require("../../services/contactService");
+const { addContact, getAllContacts, getContactById } = require("../../services/contactService");
 const { getPage } = require("../../helper/utils");
 
 module.exports.addContact = async (req, res) => {
@@ -20,5 +20,22 @@ module.exports.getAllContact = async (req, res) => {
     } catch (error) {
         console.log(error.message);
         return res.status(400).json({ error: "Something went wrong", success: false });
+    }
+}
+
+module.exports.getContactById = async (req, res, next) => {
+    try {
+        const { id } = req.query;
+        if (!id) {
+            next();
+            return;
+        }
+        const contact = await getContactById(id);
+        if (contact)
+            res.json({ contact });
+        else res.status(400).json({ error: "Id not found", success:false });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(400).json({ error: "Something went wrong :((", success: false })
     }
 }
