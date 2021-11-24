@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const purchaseHistorySchema = new mongoose.Schema({
     customerAddress: {type: String, required: true},
-    customerEmail: {type: String, required: true},
+    customerEmail: {type: String},
     customerName: {type: String, required: true},
     customerPhone: String,
     productList: [

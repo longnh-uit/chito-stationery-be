@@ -9,10 +9,9 @@ const { getPage } = require("../../helper/utils");
 
 module.exports.purchase = async (req, res) => {
     const bill = req.body;
-    if (!bill.customerEmail) bill.customerEmail = "";
     try {
-        if (!(purchase(bill))) throw "Purchase failed!"
-        return res.json({ message: "Purchase successful!", success: true });
+        if (!await purchase(bill)) throw "Purchase failed!"
+        return res.json({ message: "Purchase successfully!", success: true });
     } catch (error) {
         return res.status(400).json({ error: error, success: false });
     }

@@ -5,7 +5,11 @@ async function purchase(bill) {
     try {
         const newBill = new PurchaseHistory(bill);
         await newBill.save()
-        await User.updateOne({ email: customerEmail }, { $inc: { orders: 1 }});
+        if (bill.customerEmail != ""){
+            console.log(bill.customerEmail);
+            await User.updateOne({ email: bill.customerEmail }, { $inc: { orders: 1 }});
+        }
+        return true;
     } catch (error) {
         console.log("Error: " + error);
         return false;
