@@ -1,6 +1,7 @@
 const User = require("../models/database/users");
 const { checkTokenByEmail } = require("../services/refreshTokenService");
 const { verifyJWT } = require("../helper/authHelper");
+const keys = require("../config/keys");
 
 const authSignup = async (req, res, next) => {
     // Initialize regular expressions for username, email and password
@@ -45,7 +46,7 @@ const authToken = async (req, res, next) => {
         return res.status(401).json({ error: "You are not authenticated", success: false });
 
     const token = authheader.split(' ')[1];
-    verifyJWT(token, process.env.JWT_Secret)
+    verifyJWT(token, keys.JWT_Secret)
         .then(async decoded => {
             const email = decoded.email;
             if ((email == req.body.email) && (token == await checkTokenByEmail(email)))

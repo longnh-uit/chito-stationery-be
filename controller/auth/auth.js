@@ -1,21 +1,19 @@
-const passport = require("passport");
 const nodemailer = require("nodemailer");
 const { signUp, isExist, login } = require("../../services/userService");
 const { saveToken, checkToken, checkTokenByEmail } = require("../../services/refreshTokenService");
 const {
     verifyRefreshToken,
     verifyJWT,
-    setCookie,
     generateJWT,
 } = require("../../helper/authHelper");
-const { json } = require("express");
+const keys = require("../../config/keys");
 
 require("dotenv").config()
 
 module.exports.signup_post = (req, res) => {
     const userData = req.body;
     const { email } = userData;
-    const token = generateJWT(userData, process.env.JWT_Secret, "1h");
+    const token = generateJWT(userData, keys.JWT_Secret, "1h");
     const transporter = nodemailer.createTransport({
         service: "Gmail",
         // host: "smtp.office365.com",
@@ -23,18 +21,18 @@ module.exports.signup_post = (req, res) => {
         // requireTLS: true,
         // secure: false,
         auth: {
-            user: process.env.SENDER,
-            pass: process.env.PASSWORD,
+            user: keys.SENDER,
+            pass: keys.PASSWORD,
         },
     });
 
     const mailOptions = {
-        from: process.env.SENDER,
+        from: keys.SENDER,
         to: `${email}`,
         subject: "Chito Stationery - Activate your account",
         html: `
             <h3>Please follow link to active your account</h3>
-            <p>${process.env.SERVER_URL}/auth/activate/${token}</p>
+            <p>${keys.SERVER_URL}/auth/activate/${token}</p>
             <hr/>
         `,
     };
@@ -53,7 +51,7 @@ module.exports.signup_post = (req, res) => {
 module.exports.activate = async (req, res) => {
     try {
         const { token } = req.params;
-        const userData = await verifyJWT(token, process.env.JWT_Secret);
+        const userData = await verifyJWT(token, keys.JWT_Secret);
         const { email } = userData;
         const existingUser = await isExist(email);
         if (existingUser) {
@@ -75,8 +73,8 @@ module.exports.login_post = async (req, res) => {
     try {
         const user = await login(email, password);
         const { _id } = user;
-        const accessToken = generateJWT({ email }, process.env.JWT_Secret, "1d");
-        const refreshToken = generateJWT({ _id }, process.env.REFRESH_TOKEN, "1y");
+        const accessToken = generateJWT({ email }, keys.JWT_Secret, "1d");
+        const refreshToken = generateJWT({ _id }, keys.REFRESH_TOKEN, "1y");
         await saveToken(email, refreshToken, accessToken);
         res.status(200).json({ 
             accessToken: accessToken,
@@ -97,7 +95,7 @@ module.exports.authenticate = async (req, res) => {
 
     const token = authheader.split(' ')[1];
     try {
-        var decoded = await verifyJWT(token, process.env.JWT_Secret);
+        var decoded = await verifyJWT(token, keys.JWT_Secret);
     } catch (error) {
         return res.status(401).json({ error: "You are not authenticated", success: false });
     }
@@ -118,11 +116,11 @@ module.exports.refresh = async (req, res) => {
 
     try {
         const email = await checkToken(refToken);
-        const _id = await verifyRefreshToken(refToken, process.env.REFRESH_TOKEN);
+        const _id = await verifyRefreshToken(refToken, keys.REFRESH_TOKEN);
 
         if (email) {
-            const accessToken = generateJWT({ email }, process.env.JWT_Secret, "1d");
-            const refreshToken = generateJWT({ _id }, process.env.REFRESH_TOKEN, "1y");
+            const accessToken = generateJWT({ email }, keys.JWT_Secret, "1d");
+            const refreshToken = generateJWT({ _id }, keys.REFRESH_TOKEN, "1y");
             await saveToken(email, refreshToken, accessToken);
             res.json({
                 accessToken: accessToken,

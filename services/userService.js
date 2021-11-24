@@ -44,7 +44,7 @@ async function updateInfo(email, info) {
 }
 
 async function getAllUser() {
-    const users = await User.find();
+    const users = await User.find().sort({ createdAt: -1 });
     return users;
 }
 

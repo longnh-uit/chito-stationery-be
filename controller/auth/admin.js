@@ -4,6 +4,7 @@ const {
     verifyJWT,
     generateJWT,
 } = require("../../helper/authHelper");
+const keys = require("../../config/keys");
 
 module.exports.signUp = async (req, res) => {
     const admin = req.body;
@@ -20,7 +21,7 @@ module.exports.login = async (req, res) => {
     const { username, password } = req.body;
     try {
         const admin = await login(username, password);
-        const accessToken = generateJWT({ username }, process.env.JWT_Secret, "1d");
+        const accessToken = generateJWT({ username }, keys.JWT_Secret, "1d");
         res.json({
             accessToken: accessToken,
             message: "Login successful",
@@ -38,7 +39,7 @@ module.exports.authToken = async (req, res) => {
         return res.status(401).json({ error: "You are not authenticated", success: false });
 
     const token = authheader.split(' ')[1];
-    verifyJWT(token, process.env.JWT_Secret)
+    verifyJWT(token, keys.JWT_Secret)
         .then(async decoded => {
             const admin = await isExist(decoded.username);
             if (admin) 
