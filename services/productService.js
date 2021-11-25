@@ -52,7 +52,7 @@ async function updateProduct(id, data) {
     try {
         const newData = await Product.findByIdAndUpdate(id, data, { new: true })
         if (newData) {
-            console.log("Update successful!")
+            console.log("Update successfully!");
             return true;
         }
         else throw "ProductID not found"
@@ -66,7 +66,7 @@ async function updateProduct(id, data) {
 async function deleteProduct(id) {
     try {
         if (await Product.findByIdAndDelete(id)) {
-            console.log("Delete product successful!")
+            console.log("Delete product successfully!")
             return true
         }
         else throw new Error("ProductId not found!");

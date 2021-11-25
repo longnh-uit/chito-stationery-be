@@ -62,7 +62,7 @@ module.exports.updateProduct = async (req, res) => {
     const id = req.body.id;
     const data = {
         productName: req.body.data.productName,
-        desciption: req.body.data.desciption,
+        description: req.body.data.description,
         detail: req.body.data.detail,
         price: req.body.data.price,
         type: req.body.data.type
