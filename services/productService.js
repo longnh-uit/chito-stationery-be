@@ -40,10 +40,10 @@ async function addProduct(product) {
     try {
         const newProduct = new Product(product)
         await newProduct.save()
-        return true
+        return product;
     } catch (error) {
-        console.log(error)
-        return false
+        console.log(error.message);
+        return { error: "Something went wrong", success: false }
     }
 }
 

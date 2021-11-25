@@ -46,8 +46,10 @@ module.exports.filterProduct = async (req, res) => {
 }
 
 module.exports.addProduct = async (req, res) => {
-    await addProduct(req.body); 
-    res.json({ message:"Add successfully!", success:true });
+    const product = req.body;
+    if (product.productName == "" || product.price == "")
+        return res.json({ error: "Please fill in all the required information", success: false });
+    return res.json(await addProduct(product));
 }
 
 module.exports.deleteProduct = async (req, res) => {
