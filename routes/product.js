@@ -5,6 +5,6 @@ router.get('/', productController.getProductById, productController.getAllProduc
 router.get('/search', productController.searchProduct); // q nhớ thay dấu " " bằng dấu "%20"
 router.get('/filter', productController.filterProduct);
 router.post('/add', productController.addProduct);
-router.delete('/delete', productController.deleteProduct);
+router.delete('/delete/:id', productController.deleteProduct);
 router.patch('/update', productController.updateProduct);
 module.exports = router;

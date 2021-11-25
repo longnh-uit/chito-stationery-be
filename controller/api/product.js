@@ -74,6 +74,6 @@ module.exports.updateProduct = async (req, res) => {
             return res.json({ msg: "Update successfully!", success: true });
         })
         .catch(error => {
-            res.status(400).json({ error: error, success: false });
+            res.status(400).json({ error: "Something went wrong", success: false });
         });
 }

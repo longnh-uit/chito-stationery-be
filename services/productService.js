@@ -57,8 +57,8 @@ async function updateProduct(id, data) {
         }
         else throw "ProductID not found"
     } catch (error) {
-        console.log("Error: " + error)
-        return false;
+        console.log("Error: " + error.message)
+        throw erorr;
     }
 }
 
