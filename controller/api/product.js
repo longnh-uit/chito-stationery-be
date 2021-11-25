@@ -53,8 +53,9 @@ module.exports.addProduct = async (req, res) => {
 }
 
 module.exports.deleteProduct = async (req, res) => {
+    console.log(req.params.id);
     try {
-        await deleteProduct(req.param.id);
+        await deleteProduct(req.params.id);
         return res.json({ message: "Delete successfully!", success: true });
     } catch (error) {
         return res.status(400).json({ error: "ID not found", success: false });
