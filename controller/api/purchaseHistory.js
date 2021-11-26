@@ -31,9 +31,10 @@ module.exports.history = async (req, res) => {
     } else {
         if (!id) {
             let bills = await history();
+            const totalOrder = bills.length;
             const maxPage = Math.round((bills.length + 1) / 5);
             bills = await getPage(bills, page || 1, 5);
-            return res.json({ orders: bills, maxPage });
+            return res.json({ orders: bills, maxPage, totalOrder });
         }
         try {
             const bill = await getHistoryById(id);
