@@ -14,7 +14,7 @@ module.exports.signUp = async (req, res) => {
     }
 
     await signUp(admin);
-    return res.json({ message: "Successful!", success: true });
+    return res.json({ message: "Successfully!", success: true });
 }
 
 module.exports.login = async (req, res) => {
@@ -24,7 +24,7 @@ module.exports.login = async (req, res) => {
         const accessToken = generateJWT({ username }, keys.JWT_Secret, "1d");
         res.json({
             accessToken: accessToken,
-            message: "Login successful",
+            message: "Login successfully",
             success: true
         });
     } catch (error) {
