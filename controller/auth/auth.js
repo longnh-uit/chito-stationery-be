@@ -61,7 +61,7 @@ module.exports.activate = async (req, res) => {
             });
         }
         await signUp(userData);
-        return res.redirect("http://localhost:3000/");
+        return res.redirect(`${keys.SHOP_ADDR}/register-success`);
     } catch (err) {
         console.log(err);
         res.status(400).send({ success: false, error: "Your link has been expired, please signup again" });

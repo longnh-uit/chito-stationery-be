@@ -5,5 +5,6 @@ module.exports = {
     SENDER: process.env.SENDER,
     PASSWORD: process.env.PASSWORD,
     SERVER_URL: process.env.SERVER_URL,
-    COOKIE_KEY: process.env.COOKIE_KEY
+    COOKIE_KEY: process.env.COOKIE_KEY,
+    SHOP_ADDR: process.env.SHOP_ADDR
 }
