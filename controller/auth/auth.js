@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const { pugEngine } = require("nodemailer-pug-engine");
 const { signUp, isExist, login } = require("../../services/userService");
 const { saveToken, checkToken, checkTokenByEmail } = require("../../services/refreshTokenService");
 const {
@@ -26,15 +27,21 @@ module.exports.signup_post = (req, res) => {
         },
     });
 
+    transporter.use('compile', pugEngine({
+        templateDir: "./template",
+        pretty: true
+    }))
+
     const mailOptions = {
         from: keys.SENDER,
         to: `${email}`,
         subject: "Chito Stationery - Activate your account",
-        html: `
-            <h3>Please follow link to active your account</h3>
-            <p>${keys.SERVER_URL}/auth/activate/${token}</p>
-            <hr/>
-        `,
+        template: "template",
+        ctx: {
+            name: userData.fullname,
+            url: 'https://' + keys.SERVER_URL + "/auth/activate/" + token
+        }
+        
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
