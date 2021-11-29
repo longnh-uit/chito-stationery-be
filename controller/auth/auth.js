@@ -39,7 +39,7 @@ module.exports.signup_post = (req, res) => {
         template: "template",
         ctx: {
             name: userData.fullname,
-            url: 'https://' + keys.SERVER_URL + "/auth/activate/" + token
+            url: keys.SERVER_URL + "/auth/activate/" + token
         }
         
     };
