@@ -1,10 +1,8 @@
 head
-  link(rel='preconnect' href='https://fonts.googleapis.com')
-  link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin='')
-  link(href='https://fonts.googleapis.com/css2?family=Bellota+Text:wght@300&display=swap' rel='stylesheet')
   style.
+
     * {
-        font-family: "Bellota Text", cursive;
+        font-family: serif;
     }
     h2 {
         color: #524d4b;
@@ -22,7 +20,7 @@ head
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
-        font-family: "Bellota Text", cursive;
+        font-family: serif;
         cursor: pointer;
     }
 
@@ -31,5 +29,5 @@ p Dear #{name},
 p
   | Thanks for signing up for Chito Stationery. To complete the
   | sign-up process, please click the button below.
-a(href="https://chito-shop.herokuapp.com") Confirm Email Address
+a(href=`${url}`) Confirm Email Address
 
