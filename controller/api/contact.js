@@ -14,7 +14,7 @@ module.exports.getAllContact = async (req, res) => {
     try {
         const { page } = req.query;
         let contacts = await getAllContacts();
-        const maxPage = Math.ceil((contacts.length + 1) / 10);
+        const maxPage = Math.ceil(contacts.length / 10);
         contacts = await getPage(contacts, page || 1, 10);
         return res.json({ contacts, maxPage });
     } catch (error) {

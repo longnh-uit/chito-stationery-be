@@ -35,7 +35,7 @@ module.exports.searchProduct = async (req, res) => {
 module.exports.getAllProduct = async (req, res) => {
     const { page } = req.query;
     let products = await getAllProduct();
-    const maxPage = Math.ceil((products.length + 1) / 5);
+    const maxPage = Math.ceil(products.length / 5);
     products = await getPage(products, page || 1, 5);
     res.json({ products, maxPage });
 }

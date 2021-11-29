@@ -5,7 +5,7 @@ module.exports.getAllUser = async (req, res) => {
     try {
         const { page } = req.query;
         let users = await getAllUser();
-        const maxPage = Math.ceil((users.length + 1) / 10);
+        const maxPage = Math.ceil(users.length / 10);
         users = await getPage(users, page || 1, 10);
         return res.json({ users, maxPage });
     } catch (error) {
