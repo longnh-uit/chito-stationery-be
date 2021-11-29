@@ -34,7 +34,7 @@ async function getHistoryById(id) {
 async function getHistoryCurrentWeek() {
 
     function getMonday(d) {
-        d = new Date(d);
+        d.setHours(0, 0, 0, 0);
         var day = d.getDay(),
             diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
         d.setDate(diff);
@@ -58,6 +58,7 @@ async function getHistoryCurrentMonth() {
     
     function getFirstDateOfMonth() {
         let date = new Date();
+        date.setHours(0, 0, 0, 0);
         let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
         return firstDay;
     }
