@@ -34,6 +34,17 @@ async function changePassword(email, oldPassword, newPassword) {
     }
 }
 
+async function resetPassword(id, password) {
+    try {
+        const email = (await User.findById(id)).email;
+        await User.changePassword(email, password);
+        await User.findByIdAndUpdate(id, { resetLink: '' });
+        return true;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function updateInfo(email, info) {
     try {
         await User.updateOne({ email }, info);
@@ -48,11 +59,20 @@ async function getAllUser() {
     return users;
 }
 
+async function verifyUser(resetLink, id) {
+    const user = await User.findById(id);
+    if (resetLink == user.resetLink)
+        return true;
+    else return false;
+}
+
 module.exports = {
     signUp,
     isExist,
     login,
     changePassword,
+    resetPassword,
     updateInfo,
-    getAllUser
+    getAllUser,
+    verifyUser
 }

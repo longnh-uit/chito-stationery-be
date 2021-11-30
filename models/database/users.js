@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
         dob: Date,
         address: String,
         orders: Number,
+        resetLink: String
     },
     { timestamps: true }
 );
