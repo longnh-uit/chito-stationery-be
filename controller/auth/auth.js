@@ -67,10 +67,14 @@ module.exports.activate = async (req, res) => {
                 error: "Your email has been taken, please use other email to signup"
             });
         }
-        await signUp(userData);
-        return res.redirect(`${keys.SHOP_ADDR}/register-success`);
+        const user = await signUp(userData);
+        const { _id } = user;
+        const accessToken = generateJWT({ email }, keys.JWT_Secret, "1d");
+        const refreshToken = generateJWT({ _id }, keys.REFRESH_TOKEN, "1y");
+        await saveToken(email, refreshToken, accessToken);
+        return res.redirect(`${keys.SHOP_ADDR}/register-success/${accessToken}/${refreshToken}`);
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
         res.status(400).send({ success: false, error: "Your link has been expired, please signup again" });
     }
 }
