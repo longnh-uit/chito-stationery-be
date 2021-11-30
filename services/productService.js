@@ -78,12 +78,13 @@ async function deleteProduct(id) {
 
 async function filterProduct(filter) {
     let products = await getAllProduct();
-    const { type, higherPrice, lowerPrice } = filter;
+    const { type, higherPrice, lowerPrice, sortType } = filter;
     if (type) {
         products = await products.filter(product => {
             if (typeof type == "string") {
                 return product.type == type;
             }
+
             else {
                 try {
                     type.forEach(e => {
@@ -95,7 +96,7 @@ async function filterProduct(filter) {
                     return result;
                 }
             }
-        })
+        });
     }
     
     if (higherPrice) {
@@ -104,6 +105,17 @@ async function filterProduct(filter) {
 
     if (lowerPrice) {
         products = await products.filter(product => product.price <= Number(lowerPrice));
+    }
+
+    // Price sort type: Low to high
+    if (sortType == 1) {
+        products.sort((a, b) => {
+            return a.price - b.price;
+        })
+    } else if (sortType == 2) {
+        products.sort((a, b) => {
+            return b.price - a.price;
+        })
     }
 
     return products;
