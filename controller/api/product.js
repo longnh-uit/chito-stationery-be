@@ -42,8 +42,12 @@ module.exports.getAllProduct = async (req, res) => {
 }
 
 module.exports.filterProduct = async (req, res) => {
-    const filteredProducts = await filterProduct(req.query);
-    res.json({ filteredProducts });
+    const { page } = req.query;
+    let maxItem = 12;
+    let filteredProducts = await filterProduct(req.query);
+    const maxPage = Math.ceil(filteredProducts.length / maxItem);
+    filteredProducts = await getPage(filteredProducts, page || 1, maxItem);
+    res.json({ filteredProducts, maxPage });
 }
 
 module.exports.addProduct = async (req, res) => {
