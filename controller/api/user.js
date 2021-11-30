@@ -56,7 +56,7 @@ module.exports.forgotPassword = async (req, res) => {
     const user = await isExist(email)
 
     if (!user)
-        return res.status(400).json({ error: "User with this email does not exists." })
+        return res.status(400).json({ error: "This email address hasn't been signed up yet." })
 
     const token = generateJWT({ _id: user._id }, keys.JWT_Secret, '20m');
     const transporter = nodemailer.createTransport({
