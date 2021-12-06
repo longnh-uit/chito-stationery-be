@@ -9,7 +9,7 @@ async function signUp(user) {
         await newUser.save();
         console.log("User created");
         return newUser;
-    } catch(error) {
+    } catch (error) {
         console.log("Error: " + error);
         return false
     }
@@ -24,9 +24,14 @@ async function login(email, password) {
 }
 
 async function changePassword(email, oldPassword, newPassword) {
-    
+
     try {
         await login(email, oldPassword);
+    } catch {
+        throw "Your current password is incorrect"
+    }
+
+    try {
         await User.changePassword(email, newPassword);
         return true;
     } catch (error) {
