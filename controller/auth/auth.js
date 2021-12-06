@@ -91,7 +91,7 @@ module.exports.login_post = async (req, res) => {
             accessToken: accessToken,
             refreshToken: refreshToken,
             success: true,
-            message: "Login successful"
+            message: "Login successfully"
         });
     } catch (err) {
         res.status(400).json({ error: err, success: false, message: "Login failed" })
